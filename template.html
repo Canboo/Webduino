@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <script src="http://webduino.io/components/webcomponentsjs/webcomponents.js"></script>
+    <link rel='import' href='http://webduino.io/components/webduino/web-arduino.html' />
+    <link rel='import' href='http://webduino.io/components/webduino/wa-dht.html' />
+    <style>
+    #light img{
+      width:100%;
+      display:none;
+    }
+    #light.off img:first-child{
+      display:inline-block;
+    }
+    #light.on img:last-child{
+      display:inline-block;
+    }
+    </style>
+</head>
+<body>
+    <div id="show"></div>
+
+    <web-arduino id='board' device="32la">
+        <wa-dht id='dht' pin='10'></wa-dht>
+    </web-arduino>
+    <script>
+    window.addEventListener('WebComponentsReady', function () {
+      var board = document.getElementById('board');
+
+      board.on('ready',function ready() {
+        var dht = document.getElementById('dht'),
+          show = document.getElementById('show');
+
+        dht.read(function (evt) {
+          show.innerHTML = new Date().toLocaleString() + "<br>溫度:" + evt.temperature + " ℃<br> 溼度:" + evt.humidity + " %";
+        }, 1000);
+
+        }, false);
+
+    }, false);
+    </script>
+</body>
+</html>
